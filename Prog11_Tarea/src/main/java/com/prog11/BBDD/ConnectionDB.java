@@ -7,9 +7,9 @@ public class ConnectionDB {
    private Connection con;
    
   public void openConnection(){
-      System.out.println("Iniciado conexion........");
+      System.out.println("Iniciando conexion........");
        try {
-           this.con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/concesionario","user1","user1");
+           this.con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/concesionario","user2","user2");
            System.out.println("Conexion OK");
        } catch (SQLException ex) {
            System.out.println("Error de conexion: " + ex.getMessage()); 
@@ -26,5 +26,13 @@ public class ConnectionDB {
        
        
    }
+
+    public Connection getConnection() {
+       
+        return this.con;
+    }
+   
+   
+   
    
 }
