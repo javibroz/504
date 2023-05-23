@@ -31,7 +31,7 @@ public class VehiculosDAO {
 
     }
 
-    public static int actualizaVehiculo(ConnectionDB con, String matri, int id) {
+    public static int actualizaPropietarioVehiculo(ConnectionDB con, String matri, int id) {
 
         try {
             con.openConnection();
@@ -69,7 +69,7 @@ public class VehiculosDAO {
             PreparedStatement st = con
                     .getConnection()
                     .prepareStatement(
-                            "DELETE FROM vehiculo WHERE mat_veh = ?");
+                            "DELETE FROM vehiculo WHERE matri= ?");
             st.setString(1, matri);
 
             int eliminados = st.executeUpdate();
@@ -88,21 +88,23 @@ public class VehiculosDAO {
 
     }
 
-    public static ArrayList<String> listVehiculosPropietario(ConnectionDB con) {
+    public static ArrayList<String> listVehiculosPropietario(ConnectionDB con, String dni) {
 
         try {
             ArrayList<String> datos = new ArrayList<>();
 
             con.openConnection();
-            String consulta = "SELECT v.matri, v.marca, v.kms, v.precio, v.desc, p.id, p.nombre, p.dni "
-                    + "FROM vehiculo v, propietario p "
-                    + "WHERE v.id_prop = p.id ";
+            String consulta = "SELECT matri, marca,id_prop, kms, precio, modelo, id, nombre, dni " +
+                     "FROM vehiculo , propietario  "+
+                     "WHERE vehiculo.id_prop = propietario.id "+
+                     "AND dni=?";
 
             PreparedStatement st = con.getConnection().prepareStatement(consulta);
+            st.setString(1, dni);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                datos.add("Matricula: " + rs.getString("mat_veh") + ", marca: " + rs.getString("marca_veh") + ", km: " + rs.getInt("kms_veh") + ", precio " + rs.getInt("precio_veh") + ", Descripcion: " + rs.getString("desc_veh") + ", id propietario: " + rs.getInt("id_prop") + ", nombre propietario: " + rs.getString("nombre_prop") + ", dni propietario: " + rs.getString("dni_prop"));
+                datos.add("Matricula: " + rs.getString("matri") + ", marca: " + rs.getString("marca") + ", km: " + rs.getInt("kms") + ", precio " + rs.getInt("precio") + ", Modelo: " + rs.getString("modelo") + ", Id propietario: " + rs.getInt("id_prop") + ", Nombre : " + rs.getString("nombre") + ", DNI: " + rs.getString("dni"));
             }
 
             con.closeConnection();
@@ -119,10 +121,10 @@ public class VehiculosDAO {
             ArrayList<String> datos = new ArrayList<>();
 
             con.openConnection();
-            String consulta = "SELECT v.matri, v.marca, v.kms, v.precio, v.modelo, p.id, p.nombre, p.dni "
+            String consulta = "SELECT matri, marca, kms, precio, modelo, id, nombre, dni "
                     + "FROM vehiculo v, propietario p "
                     + "WHERE v.id_prop = p.id "
-                    + "AND v.marca = ?";
+                    + "AND marca = ?";
 
             PreparedStatement st = con.getConnection().prepareStatement(consulta);
 
@@ -136,7 +138,7 @@ public class VehiculosDAO {
                         ", km: " + rs.getInt("kms") +
                         ", precio " + rs.getInt("precio") +
                         ", Modelo: " + rs.getString("modelo") +
-                        ", id propietario: " + rs.getInt("id_prop") + 
+                        ", id propietario: " + rs.getInt("id") + 
                         ", nombre propietario: " + rs.getString("nombre") +
                         ", dni propietario: " + rs.getString("dni"));
             }
@@ -162,7 +164,7 @@ public class VehiculosDAO {
 
             while (rs.next()) {
                 datos.add("Matricula: " + rs.getString("matri")
-                        + ", Marca: " + rs.getString("marca_veh")
+                        + ", Marca: " + rs.getString("marca")
                         + ", Kms: " + rs.getInt("kms")
                         + ", Precio " + rs.getInt("precio")
                         + ", Modelo: " + rs.getString("Modelo")

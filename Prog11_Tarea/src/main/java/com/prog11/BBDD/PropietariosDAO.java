@@ -13,8 +13,8 @@ public class PropietariosDAO {
             PreparedStatement st = con.getConnection().prepareStatement(consulta);
 
             st.setInt(1, id);
-            st.setString(id, nombre);
-            st.setString(id, dni);
+            st.setString(2, nombre);
+            st.setString(3, dni);
             st.executeUpdate();
             st.close();
 
@@ -39,7 +39,7 @@ public class PropietariosDAO {
 
             PreparedStatement st = con.getConnection().prepareStatement(consulta);
 
-            st.setString(0, dni);
+            st.setString(1, dni);
 
             ResultSet rs = st.executeQuery();
 
@@ -82,5 +82,7 @@ public class PropietariosDAO {
         }
         return 0;
     }
+
+    
 
 }
